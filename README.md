@@ -1,2 +1,2 @@
 # Bricks-2d-Game
-Simple 2d game using html5 <canvas> and javascript.
+Simple 2d game using html5 canvas and javascript.
