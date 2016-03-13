@@ -27,6 +27,7 @@
 	var brickOffsetTop = 30;
 	var brickOffsetLeft = 30;
 	var score = 0;
+	var lives = 2;
 
 	
 	// game initialization
@@ -55,6 +56,8 @@
 				 leftKey = false;
 				 rightKey = false;
 			});
+
+			document.addEventListener("mousemove",mouseMoveHandler);
 
 			ball  = new component();
 			brick = new component();
@@ -133,6 +136,13 @@
 		    gameInit.ctx.fillText("Score: "+score, 8, 20);
 		}
 
+		self.drawLives = function() {
+   		    gameInit.ctx.font = "16px Arial";
+		    gameInit.ctx.fillStyle = "#2A044A";
+		    gameInit.ctx.fillText("Lives: "+lives, 400, 20);
+
+		}
+
 	}
 
 	var startGame = function () {
@@ -143,6 +153,7 @@
 		brick.drawBricks();
 		brick.collisionDetection();
 		brick.drawScore();
+		brick.drawLives();
 
 		if(x-ballRadius < 0 || x+ballRadius > canvas.width) {    
 			dx = -dx;
@@ -153,8 +164,18 @@
 			if (x > paddleX && x < paddleX+paddleWidth) {
 				dy = -dy;
 			} else {
-				alert('You lost the game :( ');
-				document.location.reload();
+				lives--;
+				if(!lives) {
+					alert('You lost the game :( ');
+					document.location.reload();
+				}
+				else {
+				    x = canvas.width/2;
+				    y = canvas.height-30;
+				    dx = 2;
+				    dy = -2;
+				    paddleX = (canvas.width-paddleWidth)/2;
+				}
 			}
 		}
 
@@ -165,8 +186,16 @@
 	    }
 
 	}
+ 
+	var mouseMoveHandler = function(e) {
+		relativeX = e.clientX - canvas.offsetLeft;
+
+		if(relativeX >= 0 && relativeX < canvas.width) {
+			paddleX = relativeX - paddleWidth/2;
+		}
+	}
 
 	window.bricksGame = gameInit;
 }(window))
 
-bricksGame.start();
+// bricksGame.start();
